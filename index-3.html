@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DiamondDeck – Free Fire Diamond Top-Up</title>
+<meta name="description" content="Top up Free Fire diamonds with your Player ID. Fast delivery, clear prices.">
+<style>
+:root{--bg:#14110f;--card:#1f1a17;--line:#3a312b;--text:#f5efe8;--muted:#b3a89d;--accent:#ff8a1f;--accent-ink:#1a0e00;--ok:#4cd68a;--err:#ff6b6b}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--text);font-family:"Trebuchet MS",Verdana,sans-serif;line-height:1.55}
+.wrap{max-width:960px;margin:auto;padding:0 20px}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font-weight:800;font-size:1.25rem;letter-spacing:.5px}
+.logo span{color:var(--accent)}
+nav a{color:var(--muted);text-decoration:none;margin-left:18px;font-size:.95rem}
+nav a:hover,nav a:focus{color:var(--text)}
+.hero{padding:48px 0 32px}
+h1{font-family:Impact,"Arial Black",sans-serif;font-size:clamp(2.4rem,8vw,4.6rem);line-height:1.02;text-transform:uppercase;max-width:14ch}
+.hero p{color:var(--muted);max-width:46ch;margin:16px 0 24px;font-size:1.05rem}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);border:0;padding:14px 26px;border-radius:8px;font-weight:800;font-size:1rem;cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.08)}
+:focus-visible{outline:3px solid #fff;outline-offset:2px}
+section{padding:36px 0}
+h2{font-size:1.6rem;margin-bottom:18px}
+.packs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.pack{background:var(--card);border:2px solid var(--line);border-radius:10px;padding:16px;text-align:left;color:var(--text);cursor:pointer;font:inherit}
+.pack b{display:block;font-size:1.3rem}
+.pack small{color:var(--muted)}
+.pack .price{display:block;margin-top:8px;color:var(--accent);font-weight:800}
+.pack[aria-pressed="true"]{border-color:var(--accent);background:#2b2018}
+.order{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;margin-top:22px}
+label{display:block;font-weight:700;margin:12px 0 6px}
+input,select{width:100%;padding:12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text);font:inherit}
+.summary{display:flex;justify-content:space-between;margin:18px 0;font-weight:800;font-size:1.1rem}
+#msg{margin-top:14px;min-height:1.4em}
+.ok{color:var(--ok)}.err{color:var(--err)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.steps div{border-left:3px solid var(--accent);padding-left:14px}
+.steps p{color:var(--muted)}
+details{border-bottom:1px solid var(--line);padding:12px 0}
+summary{cursor:pointer;font-weight:700}
+details p{color:var(--muted);margin-top:8px}
+footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:.85rem}
+@media (prefers-reduced-motion:no-preference){.btn{transition:filter .15s}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">Diamond<span>Deck</span></div>
+    <nav><a href="#packs">Packs</a><a href="#how">How it works</a><a href="#faq">FAQ</a></nav>
+  </header>
+
+  <div class="hero">
+    <h1>Free Fire diamonds, delivered to your ID</h1>
+    <p>Pick a pack, enter your Player ID, pay. Diamonds arrive in your account, usually within minutes.</p>
+    <a class="btn" href="#packs">Choose a pack</a>
+    <a class="btn" style="background:none;color:var(--text);border:1px solid var(--line);margin-left:8px" href="https://t.me/Stryphon">Telegram</a>
+  </div>
+
+  <section id="packs">
+    <h2>Diamond packs</h2>
+    <div class="packs" id="packList"></div>
+
+    <form class="order" id="orderForm" novalidate>
+      <label for="uid">Player ID</label>
+      <input id="uid" inputmode="numeric" placeholder="e.g. 1234567890" autocomplete="off">
+      <label for="pay">Payment method</label>
+      <select id="pay">
+        <option>Card</option>
+        <option>PayPal</option>
+        <option>Bank transfer</option>
+        <option>Mobile wallet</option>
+      </select>
+      <div class="summary"><span id="sumName">No pack selected</span><span id="sumPrice">$0.00</span></div>
+      <button type="submit" class="btn">Place order</button>
+      <div id="msg" role="status" aria-live="polite"></div>
+    </form>
+  </section>
+
+  <section id="how">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div><h3>1. Pick a pack</h3><p>Choose how many diamonds you want.</p></div>
+      <div><h3>2. Enter your Player ID</h3><p>Find it on your Free Fire profile screen.</p></div>
+      <div><h3>3. Pay and play</h3><p>Diamonds are added to your account after payment.</p></div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2>Questions</h2>
+    <details><summary>Do you need my password?</summary><p>No. We only need your Player ID. Never share your password with anyone.</p></details>
+    <details><summary>How long does delivery take?</summary><p>Most orders arrive within a few minutes. Contact support if yours takes longer than an hour.</p></details>
+    <details><summary>What if I enter the wrong ID?</summary><p>Check the ID before paying. Diamonds sent to a wrong ID usually can't be recovered.</p></details>
+  </section>
+
+  <footer>
+    DiamondDeck is not affiliated with Garena or Free Fire. Free Fire and Garena are trademarks of their owners.
+    <br>Aloqa: <a href="https://t.me/Stryphon" style="color:#ff8a1f">Telegram @Stryphon</a>
+  </footer>
+</div>
+
+<script>
+// Edit your packs and prices here
+const PACKS = [
+  {d:100,  price:1.10},
+  {d:310,  price:3.20},
+  {d:520,  price:5.30},
+  {d:1060, price:10.50},
+  {d:2180, price:21.00},
+  {d:5600, price:52.00}
+];
+let selected = null;
+const list = document.getElementById('packList');
+PACKS.forEach((p, i) => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'pack'; b.setAttribute('aria-pressed','false');
+  b.innerHTML = `<b>${p.d.toLocaleString()}</b><small>diamonds</small><span class="price">$${p.price.toFixed(2)}</span>`;
+  b.onclick = () => {
+    selected = p;
+    list.querySelectorAll('.pack').forEach(x => x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    document.getElementById('sumName').textContent = p.d.toLocaleString() + ' diamonds';
+    document.getElementById('sumPrice').textContent = '$' + p.price.toFixed(2);
+  };
+  list.appendChild(b);
+});
+
+document.getElementById('orderForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const msg = document.getElementById('msg');
+  const uid = document.getElementById('uid').value.trim();
+  if (!selected) { msg.className='err'; msg.textContent='Select a diamond pack first.'; return; }
+  if (!/^\d{6,12}$/.test(uid)) { msg.className='err'; msg.textContent='Enter a valid Player ID (6–12 digits).'; return; }
+  // TODO: send this order to your backend / payment provider
+  const order = {uid, diamonds:selected.d, price:selected.price, pay:document.getElementById('pay').value};
+  console.log('Order', order);
+  msg.className='ok';
+  msg.textContent = `Order received: ${selected.d} diamonds for ID ${uid}. Connect a payment gateway to complete checkout.`;
+});
+</script>
+</body>
+</html>
