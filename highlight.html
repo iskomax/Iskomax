@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HeadshotLab – Free Fire highlight topuvchi va edit yordamchi</title>
+<meta name="description" content="Free Fire headshot va highlight videolarini toping, edit rejasini tayyorlang.">
+<style>
+:root{--bg:#07080f;--card:#111325;--line:#23274a;--tx:#eef0ff;--mu:#9aa0c8;--lime:#c6ff3d;--vio:#7a5cff;--pink:#ff3d8b}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55;overflow-x:hidden}
+body.lock{overflow:hidden}
+.wrap{max-width:1040px;margin:auto;padding:0 20px}
+h1,h2,h3,.logo,.num{font-family:Impact,"Arial Black",sans-serif;text-transform:uppercase;letter-spacing:.5px}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+/* LOADER */
+#loader{position:fixed;inset:0;z-index:100;display:grid;place-items:center}
+#loader .h{position:absolute;left:0;right:0;height:50%;background:#05060b;transition:transform .9s cubic-bezier(.77,0,.18,1)}
+#loader .t{top:0}#loader .b{bottom:0}
+#loader .c{position:relative;z-index:2;text-align:center;transition:opacity .3s}
+#loader svg{width:130px;height:130px;transform:rotate(-90deg)}
+#loader circle{fill:none;stroke-width:4}
+#ring{stroke:var(--lime);stroke-dasharray:283;stroke-dashoffset:283;stroke-linecap:round}
+#loader .p{position:absolute;inset:0;display:grid;place-items:center;font:2rem Impact,sans-serif}
+#loader small{display:block;margin-top:14px;color:var(--mu);letter-spacing:3px;font-size:.75rem}
+.ready #loader .t{transform:translateY(-101%)}
+.ready #loader .b{transform:translateY(101%)}
+.ready #loader .c{opacity:0}
+.ready #loader{pointer-events:none;visibility:hidden;transition:visibility 0s 1s}
+/* NAV */
+nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:rgba(7,8,15,.7);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+nav .wrap{display:flex;justify-content:space-between;align-items:center;height:60px}
+.logo{font-size:1.3rem}.logo i{color:var(--lime);font-style:normal}
+nav a.l{margin-left:18px;color:var(--mu);text-decoration:none;font-size:.92rem;position:relative}
+nav a.l::after{content:"";position:absolute;left:0;bottom:-4px;height:2px;width:100%;background:var(--lime);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+nav a.l:hover{color:var(--tx)}nav a.l:hover::after{transform:scaleX(1)}
+@media(max-width:560px){nav a.l{display:none}}
+/* BUTTONS */
+.btn{position:relative;overflow:hidden;display:inline-block;border:0;cursor:pointer;font:1rem Impact,sans-serif;letter-spacing:.8px;text-transform:uppercase;text-decoration:none;padding:14px 26px;border-radius:10px;background:var(--lime);color:#0b1200;transition:transform .2s,box-shadow .3s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(198,255,61,.35)}
+.btn:active{transform:scale(.95)}
+.btn.g{background:transparent;color:var(--tx);border:1px solid var(--line)}
+.btn.g:hover{border-color:var(--vio);box-shadow:0 10px 30px rgba(122,92,255,.35)}
+.btn.v{background:var(--vio);color:#fff}
+.rip{position:absolute;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.6);transform:translate(-50%,-50%) scale(0);animation:rip .6s ease-out forwards;pointer-events:none}
+@keyframes rip{to{transform:translate(-50%,-50%) scale(24);opacity:0}}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+/* REVEAL */
+.rv{opacity:0;transform:translateY(40px) scale(.98);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.ready .rv.in{opacity:1;transform:none}
+/* HERO */
+.hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;perspective:900px}
+.floor{position:absolute;left:-30%;right:-30%;bottom:-10%;height:60%;background:linear-gradient(var(--line) 1px,transparent 1px) 0 0/100% 46px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/60px 100%;transform:rotateX(68deg);transform-origin:bottom;opacity:.7;mask-image:linear-gradient(transparent,#000 60%)}
+.orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.45}
+.o1{width:320px;height:320px;background:var(--vio);top:5%;left:-8%}
+.o2{width:260px;height:260px;background:var(--pink);bottom:8%;right:-6%}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:30px;align-items:center;padding-top:40px;padding-bottom:40px}
+@media(max-width:760px){.hero .wrap{grid-template-columns:1fr}}
+.tag{display:inline-block;border:1px solid var(--lime);color:var(--lime);padding:4px 12px;border-radius:99px;font-size:.78rem;letter-spacing:2px;margin-bottom:16px}
+h1{font-size:clamp(2.8rem,10vw,5.6rem);line-height:.95}
+h1 b{color:transparent;-webkit-text-stroke:2px var(--lime);display:block}
+.hero p{color:var(--mu);max-width:44ch;margin:18px 0 26px;font-size:1.05rem}
+.stage{width:190px;height:190px;margin:auto;perspective:900px}
+.cw{width:100%;height:100%;transform-style:preserve-3d;transform:rotateX(var(--my,0deg)) rotateY(var(--mx,0deg));transition:transform .2s}
+.cube{position:relative;width:100%;height:100%;transform-style:preserve-3d;animation:spin 14s linear infinite}
+.cube div{position:absolute;inset:0;display:grid;place-items:center;border:2px solid var(--lime);background:rgba(198,255,61,.07);font:1.1rem Impact,sans-serif;letter-spacing:3px;box-shadow:inset 0 0 30px rgba(198,255,61,.15)}
+.cube div:nth-child(1){transform:translateZ(95px)}
+.cube div:nth-child(2){transform:rotateY(90deg) translateZ(95px);border-color:var(--vio)}
+.cube div:nth-child(3){transform:rotateY(180deg) translateZ(95px);border-color:var(--pink)}
+.cube div:nth-child(4){transform:rotateY(270deg) translateZ(95px);border-color:var(--vio)}
+@keyframes spin{from{transform:rotateX(-18deg) rotateY(0)}to{transform:rotateX(-18deg) rotateY(360deg)}}
+/* SECTIONS */
+section{padding:70px 0}
+h2{font-size:clamp(1.9rem,6vw,3rem);line-height:1;margin-bottom:10px}
+h2 span{color:var(--lime)}
+.sub{color:var(--mu);margin-bottom:26px;max-width:56ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;padding:30px 0}
+.stat{border-left:3px solid var(--lime);padding-left:14px}
+.num{font-size:2.4rem;color:var(--lime)}
+.stat small{color:var(--mu);display:block}
+/* CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;perspective:900px}
+.tilt{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;cursor:pointer;transition:transform .15s ease-out,border-color .3s;transform-style:preserve-3d;overflow:hidden}
+.tilt::after{content:"";position:absolute;inset:0;background:radial-gradient(240px circle at var(--gx,50%) var(--gy,50%),rgba(198,255,61,.18),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+.tilt:hover{border-color:var(--lime)}.tilt:hover::after{opacity:1}
+.tilt .ic{font-size:2rem;display:inline-block;transform:translateZ(30px);transition:transform .3s}
+.tilt:hover .ic{transform:translateZ(40px) scale(1.2) rotate(-6deg)}
+.tilt h3{margin:10px 0 6px;font-size:1.25rem}
+.tilt p{color:var(--mu);font-size:.92rem}
+/* FINDER + EDITOR */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+label{display:block;font-size:.82rem;color:var(--mu);margin:14px 0 6px;letter-spacing:1px;text-transform:uppercase}
+input,select{width:100%;padding:13px;border-radius:10px;border:1px solid var(--line);background:#0a0c1a;color:var(--tx);font:inherit;transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus{border-color:var(--lime);box-shadow:0 0 0 4px rgba(198,255,61,.15);outline:0}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.chip{border:1px solid var(--line);background:none;color:var(--tx);padding:8px 14px;border-radius:99px;cursor:pointer;font:inherit;font-size:.88rem;transition:transform .2s,background .2s,border-color .2s}
+.chip:hover{transform:translateY(-2px);border-color:var(--vio)}
+.chip:active{transform:scale(.92)}
+.chip.on{background:var(--lime);color:#0b1200;border-color:var(--lime);animation:pop .3s}
+@keyframes pop{50%{transform:scale(1.12)}}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+#out{margin-top:20px;display:none}
+#out.on{display:block;animation:up .5s}
+@keyframes up{from{opacity:0;transform:translateY(20px)}}
+.bar{display:flex;height:34px;border-radius:8px;overflow:hidden;margin:12px 0}
+.bar i{display:grid;place-items:center;font:.72rem Impact,sans-serif;letter-spacing:1px;width:0;transition:width 1s cubic-bezier(.2,.7,.2,1);color:#0b1200;white-space:nowrap;overflow:hidden}
+.seg{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.93rem}
+.seg b{color:var(--lime);min-width:88px}
+ul.fx{padding-left:18px;color:var(--mu);margin:8px 0}
+ul.fx li{margin:4px 0}
+.cap{background:#0a0c1a;border:1px dashed var(--vio);border-radius:10px;padding:12px;margin:12px 0;font-size:.92rem}
+/* TOAST */
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,120px);background:var(--lime);color:#0b1200;padding:12px 22px;border-radius:99px;font-weight:700;z-index:60;transition:transform .4s cubic-bezier(.2,1.4,.3,1)}
+#toast.on{transform:translate(-50%,0)}
+footer{border-top:1px solid var(--line);padding:30px 0 calc(30px + env(safe-area-inset-bottom,0px));color:var(--mu);font-size:.85rem}
+.cta{text-align:center;padding:60px 0}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}#loader{display:none}}
+</style>
+</head>
+<body class="lock">
+
+<div id="loader"><div class="h t"></div><div class="h b"></div>
+  <div class="c"><div style="position:relative;display:inline-block">
+    <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" stroke="#23274a"/><circle id="ring" cx="50" cy="50" r="45"/></svg>
+    <div class="p"><span id="pct">0</span>%</div></div>
+    <small>YUKLANMOQDA</small></div>
+</div>
+
+<nav><div class="wrap">
+  <div class="logo">Headshot<i>Lab</i></div>
+  <div><a class="l" href="#find">Video topish</a><a class="l" href="#edit">Edit yordamchi</a><a class="l" href="#why">Imkoniyatlar</a>
+  <a class="btn" style="padding:9px 16px;margin-left:16px;font-size:.85rem" href="https://t.me/Stryphon">Telegram</a></div>
+</div></nav>
+
+<header class="hero">
+  <div class="floor" data-p="-0.08"></div>
+  <div class="orb o1" data-p="0.25"></div>
+  <div class="orb o2" data-p="-0.15"></div>
+  <div class="wrap">
+    <div>
+      <span class="tag rv">FREE FIRE · HIGHLIGHT</span>
+      <h1 class="rv" style="--d:.1s">Eng zo'r<b>headshotlar</b>bir joyda</h1>
+      <p class="rv" style="--d:.2s">Headshot va highlight videolarni tez toping, keyin AI uslubidagi edit rejasi bilan o'zingizning montajingizni yarating.</p>
+      <div class="row rv" style="--d:.3s"><a class="btn" href="#find">Video topish</a><a class="btn g" href="#edit">Edit rejasi</a></div>
+    </div>
+    <div class="stage rv" style="--d:.3s"><div class="cw" id="cw"><div class="cube"><div>HEADSHOT</div><div>CLUTCH</div><div>1 VS 4</div><div>EDIT</div></div></div></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="stats">
+    <div class="stat rv"><div class="num" data-n="6">0</div><small>video kategoriya</small></div>
+    <div class="stat rv" style="--d:.1s"><div class="num" data-n="4">0</div><small>edit uslubi</small></div>
+    <div class="stat rv" style="--d:.2s"><div class="num" data-n="3">0</div><small>platforma formati</small></div>
+    <div class="stat rv" style="--d:.3s"><div class="num" data-n="0">0</div><small>so'm, bepul</small></div>
+  </div>
+</div>
+
+<section id="find"><div class="wrap">
+  <h2 class="rv">Video <span>topuvchi</span></h2>
+  <p class="sub rv">Qidiruv so'zini yozing yoki tayyor kategoriyani tanlang. Natijalar YouTube yoki TikTok'da ochiladi.</p>
+  <div class="panel rv">
+    <label for="q">Qidiruv</label>
+    <input id="q" value="free fire headshot montage" autocomplete="off">
+    <div class="chips" id="chips">
+      <button class="chip on" data-q="free fire headshot montage">Headshot montaj</button>
+      <button class="chip" data-q="free fire 1v4 clutch">1v4 clutch</button>
+      <button class="chip" data-q="free fire awm sniper highlights">AWM sniper</button>
+      <button class="chip" data-q="free fire one tap headshot">One tap</button>
+      <button class="chip" data-q="free fire funny moments">Kulgili</button>
+      <button class="chip" data-q="free fire pro player highlights">Pro o'yinchi</button>
+    </div>
+    <div class="row"><button class="btn" id="yt">YouTube'da qidirish</button><button class="btn v" id="tt">TikTok'da qidirish</button></div>
+  </div>
+  <div class="grid" style="margin-top:22px" id="cats"></div>
+</div></section>
+
+<section id="edit"><div class="wrap">
+  <h2 class="rv">Edit <span>yordamchi</span></h2>
+  <p class="sub rv">Klip turi, uzunlik va musiqa tempini kiriting. Sizga vaqt bo'yicha edit rejasi, effektlar, izoh va hashtaglar chiqadi.</p>
+  <div class="panel rv">
+    <div class="two">
+      <div><label for="st">Uslub</label><select id="st"><option value="h">Headshot montaj</option><option value="c">Clutch</option><option value="f">Kulgili</option><option value="s">Sniper</option></select></div>
+      <div><label for="pl">Platforma</label><select id="pl"><option>TikTok</option><option>Instagram Reels</option><option>YouTube Shorts</option><option>YouTube (keng)</option></select></div>
+      <div><label for="du">Uzunlik (soniya)</label><input id="du" type="number" min="10" max="180" value="30" inputmode="numeric"></div>
+      <div><label for="bp">Musiqa BPM</label><input id="bp" type="number" min="60" max="220" value="140" inputmode="numeric"></div>
+    </div>
+    <div class="row" style="margin-top:18px"><button class="btn" id="gen">Reja tuzish</button></div>
+    <div id="out"></div>
+  </div>
+</div></section>
+
+<section id="why"><div class="wrap">
+  <h2 class="rv">Nima uchun <span>HeadshotLab</span></h2>
+  <div class="grid" style="margin-top:22px">
+    <div class="tilt rv"><span class="ic">🎯</span><h3>Tez qidiruv</h3><p>Bir bosishda kerakli highlight videolarga o'ting.</p></div>
+    <div class="tilt rv" style="--d:.1s"><span class="ic">✂️</span><h3>Bitga mos kesish</h3><p>BPM bo'yicha kesish oralig'i avtomatik hisoblanadi.</p></div>
+    <div class="tilt rv" style="--d:.2s"><span class="ic">🎬</span><h3>Effekt g'oyalari</h3><p>Slow-mo, zoom, shake va o'tishlar uslubga qarab.</p></div>
+    <div class="tilt rv" style="--d:.3s"><span class="ic">📱</span><h3>Har platformaga</h3><p>TikTok, Reels, Shorts va YouTube uchun maslahatlar.</p></div>
+  </div>
+</div></section>
+
+<div class="wrap cta rv">
+  <h2>Montajni <span>boshlaymizmi?</span></h2>
+  <p class="sub" style="margin:10px auto 22px">Savol yoki taklif bo'lsa, Telegram'da yozing.</p>
+  <a class="btn" href="https://t.me/Stryphon">@Stryphon</a>
+</div>
+
+<footer><div class="wrap">HeadshotLab Garena yoki Free Fire bilan bog'liq emas. Boshqalarning videolarini ishlatsangiz, muallifni ko'rsating yoki ruxsat oling. Eng yaxshisi, o'z gameplay'ingizni montaj qiling.</div></footer>
+<div id="toast">Nusxalandi</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+/* LOADER */
+let n=0;const iv=setInterval(()=>{n=Math.min(100,n+Math.random()*7+2);$('#pct').textContent=Math.floor(n);$('#ring').style.strokeDashoffset=283-283*n/100;
+ if(n>=100){clearInterval(iv);setTimeout(()=>{document.body.classList.add('ready');document.body.classList.remove('lock')},350)}},70);
+if(matchMedia('(prefers-reduced-motion:reduce)').matches){document.body.classList.add('ready');document.body.classList.remove('lock')}
+/* REVEAL + COUNTERS */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);const c=e.target.querySelector('[data-n]');if(c)count(c)}}),{threshold:.15});
+$$('.rv').forEach(e=>io.observe(e));
+function count(c){const t=+c.dataset.n;if(!t){c.textContent=0;return}let v=0;const s=setInterval(()=>{v++;c.textContent=v;if(v>=t)clearInterval(s)},120)}
+/* PARALLAX (scroll + mouse) */
+const par=$$('[data-p]');let tk=false;
+addEventListener('scroll',()=>{if(tk)return;tk=true;requestAnimationFrame(()=>{par.forEach(e=>e.style.transform=`translate3d(0,${scrollY*e.dataset.p}px,0)`);tk=false})},{passive:true});
+addEventListener('pointermove',e=>{const cw=$('#cw');cw.style.setProperty('--mx',((e.clientX/innerWidth-.5)*40)+'deg');cw.style.setProperty('--my',(-(e.clientY/innerHeight-.5)*40)+'deg')});
+/* 3D TILT */
+function tilt(c){c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+ c.style.transform=`perspective(700px) rotateY(${x*16}deg) rotateX(${-y*16}deg) translateZ(10px)`;c.style.setProperty('--gx',(x+.5)*100+'%');c.style.setProperty('--gy',(y+.5)*100+'%')});
+ c.addEventListener('pointerleave',()=>c.style.transform='')}
+/* RIPPLE + TOAST */
+document.addEventListener('click',e=>{const b=e.target.closest('.btn');if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement('i');s.className='rip';s.style.left=e.clientX-r.left+'px';s.style.top=e.clientY-r.top+'px';b.appendChild(s);setTimeout(()=>s.remove(),600)});
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800)}
+/* FINDER */
+const q=$('#q');
+$$('.chip').forEach(c=>c.onclick=()=>{$$('.chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');q.value=c.dataset.q});
+const go=s=>{const t=q.value.trim()||'free fire headshot';window.open(s==='y'?'https://www.youtube.com/results?search_query='+encodeURIComponent(t):'https://www.tiktok.com/search?q='+encodeURIComponent(t),'_blank','noopener')};
+$('#yt').onclick=()=>go('y');$('#tt').onclick=()=>go('t');
+const CATS=[['🎯','Headshot montaj','Eng chiroyli headshotlar to\'plami','free fire headshot montage'],['🔥','1v4 clutch','Yolg\'iz to\'rttaga qarshi','free fire 1v4 clutch'],['🔭','AWM sniper','Uzoq masofadan aniq otish','free fire awm sniper highlights'],['⚡','One tap','Bir o\'q, bir kill','free fire one tap headshot'],['😂','Kulgili lahzalar','Kulgili va kutilmagan','free fire funny moments'],['🏆','Pro o\'yinchilar','Kuchli o\'yinchilar highlight','free fire pro player highlights']];
+CATS.forEach((c,i)=>{const d=document.createElement('div');d.className='tilt rv';d.style.setProperty('--d',i*.08+'s');d.tabIndex=0;d.innerHTML=`<span class="ic">${c[0]}</span><h3>${c[1]}</h3><p>${c[2]}</p>`;
+ d.onclick=()=>{q.value=c[3];go('y')};d.onkeydown=e=>{if(e.key==='Enter')d.click()};$('#cats').appendChild(d);io.observe(d);tilt(d)});
+$$('#why .tilt').forEach(tilt);
+/* EDIT ASSISTANT */
+const FX={h:['Headshot paytida 0.3s slow-mo (tezlik 30%)','Kill lahzasida zoom 110% → 100%','Beat drop ga flash va ekran titrashi','Kill sanog\'i (1, 2, 3) matn animatsiyasi','Kontrast +15, to\'yinganlik +10'],
+ c:['Oxirgi kill da 0.5s freeze-frame','Har kill uchun kichik zoom-in','Bosim oshgan joyda vignette','Musiqa pasayib, kill da kuchli zarba','Salqin rang tusi (teal/orange)'],
+ f:['Kulgili joyni 2 marta takrorlash','Kutilmagan lahzada tovush to\'xtashi','Matn stikerlari va emoji','Tezlashtirilgan (150%) o\'tish qismlari','Yorqin, iliq ranglar'],
+ s:['Nishonga olish paytida sekinlashtirish','Zarba paytida kamera zoom va shake','Zarbadan keyin kill-cam ni qisqartirish','Bass boost bilan zarba tovushi','Kino uslubidagi qora chiziqlar']};
+const CAP={h:['Bitta o\'q, bitta kill 🎯','Bu headshot qanday bo\'ldi? 🔥','Aim shunday bo\'ladi ⚡'],c:['1v4 va hammasi tugadi 😮','Bosim ostida sovuqqonlik 🧊','Clutch mana shunday 🏆'],f:['Oxirigacha kuting 😂','Bunday bo\'lishini kutmagandim 💀','O\'yindagi eng kulgili lahza'],s:['Uzoqdan, aniq, bir o\'q 🔭','AWM bilan tinch zarba','Sniper hayoti']};
+const NAME={h:'Headshot montaj',c:'Clutch',f:'Kulgili',s:'Sniper'};
+let plan='';
+$('#gen').onclick=()=>{
+ const s=$('#st').value,p=$('#pl').value,d=Math.max(10,+$('#du').value||30),b=Math.max(60,+$('#bp').value||140),beat=60/b,bar=beat*4;
+ const parts=[['HOOK',.1,'#c6ff3d','Eng kuchli headshot birinchi 2 soniyada'],['BUILD',.4,'#7a5cff','Kuchsizroq kadrlardan kuchliga qarab boring'],['DROP',.35,'#ff3d8b','Eng yaxshi kadrlar, har bitda kesish'],['OUTRO',.15,'#eef0ff','Eng oxirgi kill va tez yakun']];
+ let t=0,seg='',bar_='';
+ parts.forEach(x=>{const len=d*x[1],a=t;t+=len;const f=v=>Math.floor(v)+'s';
+  seg+=`<div class="seg"><b>${f(a)}–${f(t)}</b><span><b style="color:#eef0ff;min-width:0">${x[0]}.</b> ${x[3]}</span></div>`;
+  bar_+=`<i style="background:${x[2]}" data-w="${x[1]*100}%">${x[0]}</i>`});
+ const cut=(beat*2).toFixed(2),ratio=/YouTube \(keng\)/.test(p)?'16:9 (gorizontal)':'9:16 (vertikal)';
+ const cap=CAP[s][Math.floor(Math.random()*3)],tags='#freefire #freefirehighlights #headshot #ff #garena #shorts';
+ plan=`${NAME[s]} · ${p} · ${d}s · ${b} BPM\nKesish: har ${cut}s (1 bar = ${bar.toFixed(2)}s)\nFormat: ${ratio}\n\nEffektlar:\n- ${FX[s].join('\n- ')}\n\nIzoh: ${cap}\n${tags}`;
+ const o=$('#out');
+ o.innerHTML=`<h3>${NAME[s]} rejasi</h3><div class="bar">${bar_}</div>${seg}
+ <div class="seg"><b>Kesish</b><span>Har <b style="color:#eef0ff;min-width:0">${cut}s</b> da kesing (${b} BPM, 1 bar = ${bar.toFixed(2)}s). Format: ${ratio}</span></div>
+ <h3 style="margin-top:16px">Effektlar</h3><ul class="fx">${FX[s].map(x=>`<li>${x}</li>`).join('')}</ul>
+ <div class="cap">${cap}<br><span style="color:var(--vio)">${tags}</span></div>
+ <button class="btn v" id="cp">Rejani nusxalash</button>`;
+ o.classList.add('on');
+ requestAnimationFrame(()=>requestAnimationFrame(()=>$$('.bar i').forEach(i=>i.style.width=i.dataset.w)));
+ $('#cp').onclick=()=>{(navigator.clipboard?navigator.clipboard.writeText(plan):Promise.reject()).then(()=>toast('Reja nusxalandi')).catch(()=>toast('Nusxalash ishlamadi'))};
+ o.scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+</script>
+</body>
+</html>
