@@ -1,263 +1,153 @@
-<!DOCTYPE html>
+from pathlib import Path
+html = r'''<!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>HeadshotLab – Free Fire highlight va edit</title>
-<meta name="description" content="Free Fire headshot va highlight videolarini toping, edit rejasini tayyorlang.">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08090b">
+<title>HeadshotLab — Free Fire Discovery</title>
 <style>
-:root{--bg:#0b0b0d;--card:#16161a;--line:#2a2a30;--tx:#fff;--mu:#a9a9b3;--am:#ffb400;--or:#ff7a00}
-*{box-sizing:border-box;margin:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55;overflow-x:hidden}
-body.lock{overflow:hidden}
-.wrap{max-width:1100px;margin:auto;padding:0 20px}
-h1,h2,h3,.logo,.num{font-family:Impact,"Arial Black",sans-serif;text-transform:uppercase;font-style:italic;letter-spacing:.5px}
-a{color:inherit}
-:focus-visible{outline:3px solid var(--am);outline-offset:3px}
-/* loader */
-#loader{position:fixed;inset:0;z-index:100;display:grid;place-items:center}
-#loader .h{position:absolute;left:0;right:0;height:50%;background:#050506;transition:transform .9s cubic-bezier(.77,0,.18,1)}
-#loader .t{top:0}#loader .b{bottom:0}
-#loader .c{position:relative;z-index:2;text-align:center;transition:opacity .3s}
-#loader svg{width:130px;height:130px;transform:rotate(-90deg)}
-#loader circle{fill:none;stroke-width:4}
-#ring{stroke:var(--am);stroke-dasharray:283;stroke-dashoffset:283;stroke-linecap:round}
-#loader .p{position:absolute;inset:0;display:grid;place-items:center;font:2rem Impact,sans-serif}
-#loader small{display:block;margin-top:14px;color:var(--mu);letter-spacing:3px;font-size:.75rem}
-.ready #loader .t{transform:translateY(-101%)}.ready #loader .b{transform:translateY(101%)}
-.ready #loader .c{opacity:0}
-.ready #loader{pointer-events:none;visibility:hidden;transition:visibility 0s 1s}
-/* nav */
-nav{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);transition:background .3s}
-nav.s{background:rgba(11,11,13,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-nav .wrap{display:flex;justify-content:space-between;align-items:center;height:68px}
-.logo{font-size:1.5rem;color:#fff}.logo i{color:var(--am)}
-nav a.l{margin-left:24px;font:700 .85rem Impact,sans-serif;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;color:#ddd;position:relative}
-nav a.l::after{content:"";position:absolute;left:0;bottom:-6px;height:3px;width:100%;background:var(--am);transform:scaleX(0);transform-origin:left;transition:transform .3s}
-nav a.l:hover{color:#fff}nav a.l:hover::after{transform:scaleX(1)}
-@media(max-width:760px){nav a.l{display:none}}
-/* slanted buttons */
-.btn{position:relative;overflow:hidden;display:inline-block;border:0;cursor:pointer;font:1.05rem Impact,sans-serif;font-style:italic;letter-spacing:1px;text-transform:uppercase;text-decoration:none;padding:15px 34px;background:linear-gradient(90deg,var(--am),var(--or));color:#1a0d00;clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%);transition:transform .2s,filter .3s}
-.btn:hover{transform:translateY(-3px);filter:brightness(1.15) drop-shadow(0 8px 16px rgba(255,140,0,.45))}
-.btn:active{transform:scale(.94)}
-.btn.g{background:#26262c;color:#fff}
-.btn.g:hover{background:#34343c}
-.btn.sm{padding:10px 22px;font-size:.85rem}
-.rip{position:absolute;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.65);transform:translate(-50%,-50%) scale(0);animation:rip .6s ease-out forwards;pointer-events:none}
-@keyframes rip{to{transform:translate(-50%,-50%) scale(24);opacity:0}}
-.row{display:flex;gap:12px;flex-wrap:wrap}
-/* reveal */
-.rv{opacity:0;transform:translateY(40px) scale(.98);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
-.ready .rv.in{opacity:1;transform:none}
-/* hero */
-.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;perspective:900px;background:radial-gradient(ellipse at 75% 40%,#3a2600 0,transparent 55%),linear-gradient(160deg,#141418,#0b0b0d)}
-.floor{position:absolute;left:-30%;right:-30%;bottom:-10%;height:55%;background:linear-gradient(#3a3a44 1px,transparent 1px) 0 0/100% 46px,linear-gradient(90deg,#3a3a44 1px,transparent 1px) 0 0/60px 100%;transform:rotateX(68deg);transform-origin:bottom;opacity:.55;mask-image:linear-gradient(transparent,#000 60%)}
-.slash{position:absolute;top:-10%;bottom:-10%;width:180px;background:linear-gradient(180deg,rgba(255,180,0,.22),rgba(255,122,0,.03));transform:skewX(-20deg)}
-.s1{right:22%}.s2{right:6%;width:90px}
-.hero .wrap{position:relative;display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center;padding-top:110px;padding-bottom:60px}
-@media(max-width:800px){.hero .wrap{grid-template-columns:1fr}}
-.tag{display:inline-block;background:var(--am);color:#1a0d00;font:.85rem Impact,sans-serif;letter-spacing:2px;padding:4px 14px;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);margin-bottom:18px}
-h1{font-size:clamp(3rem,11vw,6.4rem);line-height:.92}
-h1 b{display:block;color:var(--am)}
-.hero p{color:#cfcfd6;max-width:46ch;margin:20px 0 28px;font-size:1.05rem}
-.stage{width:200px;height:200px;margin:auto;perspective:900px}
-.cw{width:100%;height:100%;transform-style:preserve-3d;transform:rotateX(var(--my,0deg)) rotateY(var(--mx,0deg));transition:transform .2s}
-.cube{position:relative;width:100%;height:100%;transform-style:preserve-3d;animation:spin 14s linear infinite}
-.cube div{position:absolute;inset:0;display:grid;place-items:center;border:2px solid var(--am);background:rgba(255,180,0,.08);font:1.15rem Impact,sans-serif;font-style:italic;letter-spacing:3px;box-shadow:inset 0 0 30px rgba(255,180,0,.2)}
-.cube div:nth-child(1){transform:translateZ(100px)}
-.cube div:nth-child(2){transform:rotateY(90deg) translateZ(100px);border-color:var(--or)}
-.cube div:nth-child(3){transform:rotateY(180deg) translateZ(100px)}
-.cube div:nth-child(4){transform:rotateY(270deg) translateZ(100px);border-color:var(--or)}
-@keyframes spin{from{transform:rotateX(-18deg) rotateY(0)}to{transform:rotateX(-18deg) rotateY(360deg)}}
-/* sections */
-section{padding:80px 0}
-h2{font-size:clamp(2rem,6vw,3.4rem);line-height:1;margin-bottom:12px}
-h2 span{color:var(--am)}
-h2::after{content:"";display:block;width:70px;height:5px;background:var(--am);margin-top:12px;transform:skewX(-20deg)}
-.sub{color:var(--mu);margin:16px 0 28px;max-width:58ch}
-.dark{background:#101013;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;perspective:900px}
-.tilt{position:relative;background:var(--card);border:1px solid var(--line);padding:24px;cursor:pointer;transition:transform .15s ease-out,border-color .3s;transform-style:preserve-3d;overflow:hidden;border-left:4px solid var(--am)}
-.tilt::after{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%),rgba(255,180,0,.2),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
-.tilt:hover{border-color:var(--am)}.tilt:hover::after{opacity:1}
-.tilt .ic{font-size:2.2rem;display:inline-block;transform:translateZ(30px);transition:transform .3s}
-.tilt:hover .ic{transform:translateZ(40px) scale(1.2) rotate(-6deg)}
-.tilt h3{margin:10px 0 6px;font-size:1.3rem}
-.tilt p{color:var(--mu);font-size:.92rem}
-.tilt small{display:inline-block;background:#26262c;color:var(--am);font:.72rem Impact,sans-serif;letter-spacing:1.5px;padding:3px 10px;margin-bottom:4px}
-/* panels */
-.panel{background:var(--card);border:1px solid var(--line);padding:24px;border-top:4px solid var(--am)}
-label{display:block;font:.8rem Impact,sans-serif;color:var(--mu);margin:14px 0 6px;letter-spacing:1.5px;text-transform:uppercase}
-input,select{width:100%;padding:13px;border:1px solid var(--line);background:#0b0b0d;color:var(--tx);font:inherit;transition:border-color .2s,box-shadow .2s}
-input:focus,select:focus{border-color:var(--am);box-shadow:0 0 0 4px rgba(255,180,0,.15);outline:0}
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
-.chip{border:1px solid var(--line);background:none;color:var(--tx);padding:8px 16px;cursor:pointer;font:inherit;font-size:.88rem;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);background:#26262c;transition:transform .2s,background .2s}
-.chip:hover{transform:translateY(-2px);background:#34343c}
-.chip:active{transform:scale(.92)}
-.chip.on{background:var(--am);color:#1a0d00;animation:pop .3s}
-@keyframes pop{50%{transform:scale(1.12)}}
-.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-#out{margin-top:22px;display:none}
-#out.on{display:block;animation:up .5s}
-@keyframes up{from{opacity:0;transform:translateY(20px)}}
-.bar{display:flex;height:36px;overflow:hidden;margin:12px 0}
-.bar i{display:grid;place-items:center;font:.72rem Impact,sans-serif;letter-spacing:1px;width:0;transition:width 1s cubic-bezier(.2,.7,.2,1);color:#1a0d00;white-space:nowrap;overflow:hidden}
-.seg{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.93rem}
-.seg b{color:var(--am);min-width:88px}
-ul.fx{padding-left:18px;color:var(--mu);margin:8px 0}
-.cap{background:#0b0b0d;border:1px dashed var(--am);padding:12px;margin:12px 0;font-size:.92rem}
-/* esports */
-.es{position:relative;overflow:hidden;padding:90px 0;background:linear-gradient(120deg,#2a1a00,#0b0b0d 60%)}
-.es .slash{right:8%;width:220px}
-#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,120px);background:var(--am);color:#1a0d00;padding:12px 24px;font-weight:700;z-index:60;transition:transform .4s cubic-bezier(.2,1.4,.3,1)}
-#toast.on{transform:translate(-50%,0)}
-footer{background:#050506;border-top:1px solid var(--line);padding:40px 0 calc(30px + env(safe-area-inset-bottom,0px));color:var(--mu);font-size:.85rem}
-footer .cols{display:flex;gap:40px;flex-wrap:wrap;margin-bottom:20px}
-footer a{display:block;text-decoration:none;margin:6px 0}footer a:hover{color:var(--am)}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}#loader{display:none}}
+:root{--bg:#08090b;--panel:rgba(17,18,22,.72);--line:rgba(220,204,166,.18);--gold:#d9c18a;--gold2:#a88b56;--white:#f3f0e9;--muted:#99958c;--violet:#9a78c7;--mint:#8eb9a7}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{min-height:100vh;background:var(--bg);color:var(--white);font-family:Inter,Arial,sans-serif;overflow-x:hidden}
+button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+#ambient{position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 50% 40%,#27231c 0%,#111216 38%,#08090b 76%);overflow:hidden}
+#dust{position:absolute;inset:0;width:100%;height:100%;opacity:.85}
+.ambient-glow{position:absolute;width:50vw;height:50vw;filter:blur(100px);border-radius:50%;opacity:.10;pointer-events:none}
+.glow-gold{background:#b89a61;top:10%;left:28%}.glow-violet{background:#75539a;right:-20%;top:35%;opacity:.08}
+header{position:fixed;top:0;left:0;right:0;z-index:30;padding:22px clamp(20px,5vw,76px);display:flex;align-items:center;justify-content:space-between;transition:.35s}
+header.scrolled{background:rgba(8,9,11,.76);backdrop-filter:blur(22px);border-bottom:1px solid var(--line)}
+.brand{font-size:17px;letter-spacing:2px;font-weight:800}.brand span{color:var(--gold)}
+.nav{display:flex;gap:9px}.nav a{font-size:10px;letter-spacing:1.8px;color:#c6c0b3;padding:10px 16px;border:1px solid transparent;border-radius:30px;transition:.25s}.nav a:hover{border-color:var(--line);color:var(--gold);background:#ffffff08}
+.live{font-size:9px;letter-spacing:2px;color:#aaa69b}.live:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint);margin:0 8px 1px 0}
+main{width:min(1160px,92vw);margin:auto;padding:130px 0 50px}
+.hero{min-height:530px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:30px;position:relative}
+.copy{position:relative;z-index:5;padding:20px 0}
+.kicker{font-size:9px;letter-spacing:4px;color:var(--gold);text-transform:uppercase}
+h1{font-size:clamp(48px,7vw,88px);line-height:.92;letter-spacing:-5px;font-weight:800;margin:24px 0}
+h1 em{font-style:normal;color:var(--gold);display:block}
+.desc{max-width:440px;color:#aaa69d;font-size:13px;line-height:1.9}
+.hero-actions{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);border-radius:30px;padding:13px 20px;background:linear-gradient(120deg,#d9c18a,#9e8554);color:#171510;font-size:10px;font-weight:800;letter-spacing:1.5px;transition:.25s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 12px 35px #b69a5a33}
+.btn.ghost{background:#ffffff08;color:#e7e0d1}.btn.ghost:hover{border-color:var(--gold);color:var(--gold)}
+.art{height:440px;position:relative;perspective:1000px;display:grid;place-items:center}
+.art-orbit{position:absolute;width:340px;height:340px;border:1px solid #d9c18a22;border-radius:50%;transform:rotateX(68deg);box-shadow:0 0 70px #d9c18a12,inset 0 0 50px #d9c18a0c;animation:orbit 12s linear infinite}
+.art-orbit:before,.art-orbit:after{content:"";position:absolute;inset:18%;border:1px solid #d9c18a22;border-radius:50%}
+.art-orbit:after{inset:38%}
+@keyframes orbit{to{transform:rotateX(68deg) rotateZ(360deg)}}
+.infinity{position:relative;width:260px;height:260px;filter:drop-shadow(0 0 22px #d9c18a66);animation:float 6s ease-in-out infinite}
+.infinity svg{width:100%;height:100%;overflow:visible}
+.infinity path{fill:none;stroke:url(#metal);stroke-width:1.4;stroke-linecap:round;stroke-dasharray:2 3}
+@keyframes float{50%{transform:translateY(-16px) rotateY(8deg)}}
+.orbit-label{position:absolute;font-size:9px;letter-spacing:2px;color:var(--gold);border:1px solid #d9c18a44;border-radius:30px;padding:9px 13px;background:#0b0c0ebd;backdrop-filter:blur(10px);animation:float 7s ease-in-out infinite}
+.label-a{top:15%;right:4%}.label-b{bottom:16%;left:4%;animation-delay:-3s}
+.search-wrap{position:relative;z-index:8;margin:-10px auto 0;max-width:900px}
+.search-card{padding:25px;border:1px solid #d9c18a35;border-radius:20px;background:linear-gradient(135deg,rgba(31,30,27,.82),rgba(12,13,16,.88));backdrop-filter:blur(24px);box-shadow:0 35px 100px #0009,inset 0 1px #ffffff18;transform:rotateX(1deg);animation:cardfloat 8s ease-in-out infinite}
+@keyframes cardfloat{50%{transform:translateY(-8px) rotateX(1deg)}}
+.card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}.card-top b{font-size:10px;letter-spacing:2px}.card-top span{font-size:9px;color:var(--muted);letter-spacing:1px}
+.searchline{display:flex;gap:10px;padding:7px;border:1px solid #ffffff20;background:#07080bbd;border-radius:13px}
+.searchline input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:white;padding:10px;font-size:14px}
+.searchline input::placeholder{color:#77756e}.searchline button{border:0;border-radius:9px;padding:0 22px;background:var(--gold);color:#171510;font-size:10px;font-weight:900;letter-spacing:1px}
+.tools-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:15px}
+.platforms,.filters{display:flex;gap:7px;flex-wrap:wrap}
+.pill{border:1px solid #ffffff1c;border-radius:30px;background:#ffffff08;color:#aaa69d;padding:8px 13px;font-size:10px;transition:.2s}
+.pill.active,.pill:hover{color:var(--gold);border-color:#d9c18a77;background:#d9c18a12}
+.quick{margin-top:20px}.quick-title{display:flex;justify-content:space-between;color:#9e9a90;font-size:9px;letter-spacing:2px;margin-bottom:11px}
+.tags{display:flex;gap:7px;flex-wrap:wrap}
+.tag{border:1px solid #ffffff16;border-radius:30px;padding:8px 12px;background:#ffffff06;color:#c4bfb4;font-size:10px;transition:.2s}
+.tag:hover{border-color:#d9c18a66;color:var(--gold);transform:translateY(-2px)}
+.content-section{margin-top:90px;position:relative}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:22px;gap:15px}
+.section-head small{color:var(--gold);letter-spacing:3px;font-size:9px}
+.section-head h2{font-size:clamp(24px,4vw,38px);letter-spacing:-1.5px;margin-top:8px}
+.section-head p{color:var(--muted);font-size:11px;max-width:360px;line-height:1.7}
+.sponsor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.sponsor{min-height:180px;border:1px solid var(--line);border-radius:16px;padding:20px;position:relative;overflow:hidden;background:linear-gradient(135deg,#191a1fdd,#101115dd);transition:.3s;transform-style:preserve-3d}
+.sponsor:hover{transform:translateY(-7px) rotateX(2deg);border-color:#d9c18a66;box-shadow:0 20px 50px #0007}
+.sponsor:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;right:-55px;bottom:-80px;background:var(--sponsor-glow,#d9c18a);filter:blur(55px);opacity:.22}
+.sponsor .s-label{font-size:8px;letter-spacing:2px;color:var(--gold);border:1px solid #d9c18a44;border-radius:30px;padding:6px 9px;display:inline-block}
+.sponsor h3{font-size:18px;margin:19px 0 7px;letter-spacing:-.5px}
+.sponsor p{font-size:10px;line-height:1.7;color:#9b9aa0;max-width:240px}
+.sponsor a{display:inline-block;margin-top:15px;color:var(--gold);font-size:9px;letter-spacing:1px}
+.sponsor:nth-child(2){--sponsor-glow:#9171bd}.sponsor:nth-child(3){--sponsor-glow:#6eaa9b}
+.sponsor:nth-child(2) .s-label{color:#b69bd9;border-color:#9171bd66}.sponsor:nth-child(3) .s-label{color:#9ccdbb;border-color:#6eaa9b66}
+.sponsor-note{font-size:9px;color:#77756e;margin-top:12px}
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px}
+.info-card{border:1px solid var(--line);border-radius:15px;padding:18px;background:#ffffff06}
+.info-card h3{font-size:10px;letter-spacing:2px;color:#d8d2c6;margin-bottom:12px}
+#history,#favorites{display:flex;gap:7px;flex-wrap:wrap;min-height:25px}
+.history-item{border:1px solid #ffffff1a;background:#ffffff08;color:#bdb8ae;border-radius:20px;padding:7px 10px;font-size:9px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history-item:hover{color:var(--gold);border-color:#d9c18a66}
+.empty{color:#77756e;font-size:10px}
+.contact-band{margin-top:80px;border:1px solid #d9c18a35;border-radius:18px;padding:28px;background:linear-gradient(110deg,#b69a5a18,#ffffff04 60%);display:flex;align-items:center;justify-content:space-between;gap:20px}
+.contact-band h2{font-size:clamp(20px,3vw,30px);letter-spacing:-1px}.contact-band p{font-size:11px;color:#9b988f;margin-top:7px}
+footer{padding:35px 0 10px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;color:#68675f;font-size:9px;letter-spacing:1px}
+.toast{position:fixed;z-index:100;bottom:24px;left:50%;transform:translate(-50%,80px);opacity:0;background:var(--gold);color:#15130e;padding:11px 17px;border-radius:25px;font-size:11px;font-weight:800;transition:.3s}.toast.show{transform:translate(-50%,0);opacity:1}
+@media(max-width:800px){.hero{grid-template-columns:1fr;min-height:auto;padding-top:30px}.copy{text-align:center}.desc{margin:auto}.hero-actions{justify-content:center}.art{height:310px}.infinity{width:210px;height:210px}.art-orbit{width:270px;height:270px}.search-wrap{margin-top:0}.sponsor-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){header{padding:17px 5vw}.live{display:none}.nav a{padding:8px;font-size:8px}.brand{font-size:14px}.hero{padding-top:10px}h1{letter-spacing:-3px}.art{height:250px}.infinity{width:175px;height:175px}.art-orbit{width:225px;height:225px}.search-card{padding:15px}.searchline{gap:4px}.searchline input{font-size:11px;padding:8px}.searchline button{padding:0 12px;font-size:9px}.sponsor-grid,.bottom-grid{grid-template-columns:1fr}.sponsor{min-height:150px}.section-head{align-items:start;flex-direction:column}.contact-band{align-items:start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
-<body class="lock">
-
-<div id="loader"><div class="h t"></div><div class="h b"></div>
-  <div class="c"><div style="position:relative;display:inline-block">
-    <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" stroke="#2a2a30"/><circle id="ring" cx="50" cy="50" r="45"/></svg>
-    <div class="p"><span id="pct">0</span>%</div></div><small>YUKLANMOQDA</small></div>
-</div>
-
-<nav id="nav"><div class="wrap">
-  <div class="logo">Headshot<i>Lab</i></div>
-  <div><a class="l" href="#news">Yangi</a><a class="l" href="#find">Video</a><a class="l" href="#cat">Kategoriya</a><a class="l" href="#edit">Edit</a><a class="l" href="#es">Esports</a>
-  <a class="btn sm" style="margin-left:22px" href="https://t.me/Stryphon">Telegram</a></div>
-</div></nav>
-
-<header class="hero">
-  <div class="floor" data-p="-0.08"></div>
-  <div class="slash s1" data-p="0.12"></div><div class="slash s2" data-p="-0.1"></div>
-  <div class="wrap">
-    <div>
-      <span class="tag rv">BEPUL · FREE FIRE HIGHLIGHT</span>
-      <h1 class="rv" style="--d:.1s">Headshot.<b>Highlight.</b>Edit.</h1>
-      <p class="rv" style="--d:.2s">Eng zo'r headshot va highlight videolarni toping, keyin edit rejasi bilan o'zingizning montajingizni yarating. Uslub bilan jang qiling.</p>
-      <div class="row rv" style="--d:.3s"><a class="btn" href="#find">Video topish</a><a class="btn g" href="#edit">Edit rejasi</a></div>
-    </div>
-    <div class="stage rv" style="--d:.3s"><div class="cw" id="cw"><div class="cube"><div>HEADSHOT</div><div>CLUTCH</div><div>1 VS 4</div><div>EDIT</div></div></div></div>
-  </div>
-</header>
-
-<section id="news"><div class="wrap">
-  <h2 class="rv">Yangi <span>highlight</span></h2>
-  <p class="sub rv">Bugun tavsiya etiladigan qidiruvlar. Birini bosing, natijalar YouTube'da ochiladi.</p>
-  <div class="grid" id="newsg"></div>
-</div></section>
-
-<section id="find" class="dark"><div class="wrap">
-  <h2 class="rv">Video <span>topuvchi</span></h2>
-  <p class="sub rv">Qidiruv so'zini yozing yoki tayyor mavzuni tanlang. Natijalar YouTube yoki TikTok'da ochiladi.</p>
-  <div class="panel rv">
-    <label for="q">Qidiruv</label>
-    <input id="q" value="free fire headshot montage" autocomplete="off">
-    <div class="chips">
-      <button class="chip on" data-q="free fire headshot montage">Headshot montaj</button>
-      <button class="chip" data-q="free fire 1v4 clutch">1v4 clutch</button>
-      <button class="chip" data-q="free fire awm sniper highlights">AWM sniper</button>
-      <button class="chip" data-q="free fire one tap headshot">One tap</button>
-      <button class="chip" data-q="free fire funny moments">Kulgili</button>
-      <button class="chip" data-q="free fire pro player highlights">Pro o'yinchi</button>
-    </div>
-    <div class="row"><button class="btn" id="yt">YouTube</button><button class="btn g" id="tt">TikTok</button></div>
-  </div>
-</div></section>
-
-<section id="cat"><div class="wrap">
-  <h2 class="rv">Kategoriyani <span>tanlang</span></h2>
-  <p class="sub rv">Qaysi uslubdagi highlight sizga yoqadi?</p>
-  <div class="grid" id="cats"></div>
-</div></section>
-
-<section id="edit" class="dark"><div class="wrap">
-  <h2 class="rv">Edit <span>yordamchi</span></h2>
-  <p class="sub rv">Uslub, uzunlik va musiqa tempini kiriting. Vaqt bo'yicha reja, effektlar, izoh va hashtaglar chiqadi.</p>
-  <div class="panel rv">
-    <div class="two">
-      <div><label for="st">Uslub</label><select id="st"><option value="h">Headshot montaj</option><option value="c">Clutch</option><option value="f">Kulgili</option><option value="s">Sniper</option></select></div>
-      <div><label for="pl">Platforma</label><select id="pl"><option>TikTok</option><option>Instagram Reels</option><option>YouTube Shorts</option><option>YouTube (keng)</option></select></div>
-      <div><label for="du">Uzunlik (soniya)</label><input id="du" type="number" min="10" max="180" value="30" inputmode="numeric"></div>
-      <div><label for="bp">Musiqa BPM</label><input id="bp" type="number" min="60" max="220" value="140" inputmode="numeric"></div>
-    </div>
-    <div class="row" style="margin-top:20px"><button class="btn" id="gen">Reja tuzish</button></div>
-    <div id="out"></div>
-  </div>
-</div></section>
-
-<section id="es" class="es"><div class="slash" data-p="0.1"></div><div class="wrap">
-  <h2 class="rv">Esports</h2>
-  <p class="sub rv">Dunyodagi eng kuchli jamoalar jangini kuzating va ulardan highlight g'oyalari oling.</p>
-  <a class="btn rv" href="https://www.ffesports.com/" target="_blank" rel="noopener">Esports sayti</a>
-</div></section>
-
-<footer><div class="wrap">
-  <div class="cols">
-    <div><div class="logo" style="margin-bottom:8px">Headshot<i>Lab</i></div>Highlight topish va edit uchun</div>
-    <div><a href="#find">Video topuvchi</a><a href="#edit">Edit yordamchi</a><a href="#cat">Kategoriyalar</a></div>
-    <div><a href="https://t.me/Stryphon">Telegram: @Stryphon</a><a href="https://ff.garena.com/en" target="_blank" rel="noopener">Rasmiy Free Fire sayti</a></div>
-  </div>
-  HeadshotLab Garena yoki Free Fire bilan bog'liq emas. Free Fire va Garena o'z egalarining tovar belgilari. Boshqalarning videolarini ishlatsangiz, muallifni ko'rsating yoki ruxsat oling.
-</div></footer>
-<div id="toast">Nusxalandi</div>
-
+<body>
+<div id="ambient"><canvas id="dust"></canvas><div class="ambient-glow glow-gold"></div><div class="ambient-glow glow-violet"></div></div>
+<header id="header"><a class="brand" href="#">HEADSHOT<span>LAB</span></a><nav class="nav"><a href="#search">SEARCH</a><a href="#sponsors">SPONSORS</a><a href="#contact">CONTACT</a></nav><div class="live">ONLINE</div></header>
+<main>
+<section class="hero">
+ <div class="copy"><div class="kicker">FREE FIRE VIDEO DISCOVERY</div><h1>FIND YOUR<br><em>HIGHLIGHT.</em></h1><p class="desc">Headshot, clutch, sniper va pro-player videolarini toping. Eng yaxshi gameplay lahzalarini kashf qiling va o'z editingiz uchun ilhom oling.</p><div class="hero-actions"><a class="btn" href="#search">START SEARCHING ↗</a><a class="btn ghost" href="#sponsors">OUR PARTNERS</a></div></div>
+ <div class="art"><div class="art-orbit"></div><div class="infinity"><svg viewBox="0 0 300 300"><defs><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff2c7"/><stop offset=".45" stop-color="#b99a5e"/><stop offset="1" stop-color="#f4e5b7"/></linearGradient></defs><path d="M150 150 C105 70 50 95 75 150 C100 205 125 235 150 150 C175 65 225 95 225 150 C225 205 175 230 150 150Z"/><path d="M150 150 C120 105 80 110 90 150 C100 190 130 210 150 150 C170 90 210 110 210 150 C210 190 180 205 150 150Z" opacity=".55"/><path d="M150 45 C150 100 150 200 150 255" opacity=".22"/></svg></div><div class="orbit-label label-a">PRECISION / 01</div><div class="orbit-label label-b">HEADSHOT LAB / FF</div></div>
+</section>
+<section class="search-wrap" id="search">
+ <div class="search-card">
+  <div class="card-top"><b>VIDEO SEARCH TERMINAL</b><span>DISCOVER · WATCH · CREATE</span></div>
+  <div class="searchline"><input id="query" value="free fire headshot montage" placeholder="Search Free Fire videos..." aria-label="Search videos"><button id="searchBtn">SEARCH ↗</button></div>
+  <div class="tools-row"><div class="platforms"><button class="pill active" data-platform="youtube">▶ YOUTUBE</button><button class="pill" data-platform="tiktok">♪ TIKTOK</button></div><div class="filters"><button class="pill active" data-filter="all">ALL</button><button class="pill" data-filter="recent">RECENT</button><button class="pill" data-filter="popular">POPULAR</button></div></div>
+  <div class="quick"><div class="quick-title"><span>QUICK SEARCH</span><span>SELECT A CATEGORY</span></div><div class="tags">
+   <button class="tag" data-q="free fire headshot montage">✧ HEADSHOT</button><button class="tag" data-q="free fire 1v4 clutch">1 VS 4 CLUTCH</button><button class="tag" data-q="free fire awm sniper highlights">AWM SNIPER</button><button class="tag" data-q="free fire one tap headshot">ONE TAP</button><button class="tag" data-q="free fire funny moments">FUNNY MOMENTS</button><button class="tag" data-q="free fire pro player highlights">PRO PLAYERS</button><button class="tag" data-q="free fire tournament highlights">TOURNAMENT</button><button class="tag" data-q="free fire cinematic edit">CINEMATIC EDIT</button>
+  </div></div>
+ </div>
+</section>
+<section class="content-section" id="sponsors">
+ <div class="section-head"><div><small>COLLABORATIONS /  PARTNERS</small><h2>SPONSORSHIP SPACE</h2></div><p>Brendlar, gaming do'konlari va kontent yaratuvchilar uchun hamkorlik maydoni.</p></div>
+ <div class="sponsor-grid">
+  <article class="sponsor"><span class="s-label">SPONSOR SLOT 01</span><h3>Your Brand Here</h3><p>Gaming mahsulotlari, aksessuarlar yoki xizmatlaringizni HeadshotLab auditoriyasiga taniting.</p><a href="https://t.me/Stryphon" target="_blank" rel="noopener">BECOME A PARTNER ↗</a></article>
+  <article class="sponsor"><span class="s-label">SPONSOR SLOT 02</span><h3>Gaming Partner</h3><p>Hamkorlik aksiyalari, turnirlar va maxsus takliflar uchun reklama joyi.</p><a href="https://t.me/Stryphon" target="_blank" rel="noopener">DISCUSS A CAMPAIGN ↗</a></article>
+  <article class="sponsor"><span class="s-label">SPONSOR SLOT 03</span><h3>Creator Spotlight</h3><p>Free Fire creatorlar va jamoalar uchun o'z loyihasini namoyish qilish imkoniyati.</p><a href="https://t.me/Stryphon" target="_blank" rel="noopener">GET FEATURED ↗</a></article>
+ </div>
+ <div class="sponsor-note">* Bu joylar homiylik uchun namuna. Haqiqiy homiylar bilan kelishuv bo'lmaguncha ular reklama sifatida ko'rsatilmaydi.</div>
+</section>
+<section class="bottom-grid">
+ <div class="info-card"><h3>RECENT SEARCHES <button id="clearHistory" style="float:right;background:none;border:0;color:var(--gold);font-size:9px">CLEAR</button></h3><div id="history"><span class="empty">Search history will appear here.</span></div></div>
+ <div class="info-card"><h3>SAVED SEARCHES</h3><div id="favorites"><span class="empty">Save a search to keep it here.</span></div><button id="saveSearch" class="pill" style="margin-top:12px">＋ SAVE CURRENT SEARCH</button></div>
+</section>
+<section class="contact-band" id="contact"><div><h2>LET'S WORK TOGETHER.</h2><p>Homiylik, reklama yoki hamkorlik bo'yicha biz bilan bog'laning.</p></div><a class="btn" href="https://t.me/Stryphon" target="_blank" rel="noopener">CONTACT ON TELEGRAM ↗</a></section>
+<footer><span>© <span id="year"></span> HEADSHOTLAB</span><span>BUILT FOR FREE FIRE COMMUNITY</span><span>NOT AFFILIATED WITH GARENA</span></footer>
+</main><div class="toast" id="toast" role="status"></div>
 <script>
+(()=>{
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-let n=0;const iv=setInterval(()=>{n=Math.min(100,n+Math.random()*7+2);$('#pct').textContent=Math.floor(n);$('#ring').style.strokeDashoffset=283-283*n/100;
- if(n>=100){clearInterval(iv);setTimeout(()=>{document.body.classList.add('ready');document.body.classList.remove('lock')},350)}},70);
-if(matchMedia('(prefers-reduced-motion:reduce)').matches){document.body.classList.add('ready');document.body.classList.remove('lock')}
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
-$$('.rv').forEach(e=>io.observe(e));
-const par=$$('[data-p]'),nav=$('#nav');let tk=false;
-addEventListener('scroll',()=>{nav.classList.toggle('s',scrollY>40);if(tk)return;tk=true;requestAnimationFrame(()=>{par.forEach(e=>e.style.transform=`translate3d(0,${scrollY*e.dataset.p}px,0)`+(e.classList.contains('slash')?' skewX(-20deg)':''));tk=false})},{passive:true});
-addEventListener('pointermove',e=>{const c=$('#cw');c.style.setProperty('--mx',((e.clientX/innerWidth-.5)*40)+'deg');c.style.setProperty('--my',(-(e.clientY/innerHeight-.5)*40)+'deg')});
-function tilt(c){c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
- c.style.transform=`perspective(700px) rotateY(${x*14}deg) rotateX(${-y*14}deg) translateZ(10px)`;c.style.setProperty('--gx',(x+.5)*100+'%');c.style.setProperty('--gy',(y+.5)*100+'%')});
- c.addEventListener('pointerleave',()=>c.style.transform='')}
-document.addEventListener('click',e=>{const b=e.target.closest('.btn');if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement('i');s.className='rip';s.style.left=e.clientX-r.left+'px';s.style.top=e.clientY-r.top+'px';b.appendChild(s);setTimeout(()=>s.remove(),600)});
-function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800)}
-const q=$('#q');
-$$('.chip').forEach(c=>c.onclick=()=>{$$('.chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');q.value=c.dataset.q});
-const go=s=>{const t=q.value.trim()||'free fire headshot';window.open(s==='y'?'https://www.youtube.com/results?search_query='+encodeURIComponent(t):'https://www.tiktok.com/search?q='+encodeURIComponent(t),'_blank','noopener')};
-$('#yt').onclick=()=>go('y');$('#tt').onclick=()=>go('t');
-function mk(box,list,news){list.forEach((c,i)=>{const d=document.createElement('div');d.className='tilt rv';d.style.setProperty('--d',i*.08+'s');d.tabIndex=0;
- d.innerHTML=news?`<small>${c[4]}</small><h3>${c[1]}</h3><p>${c[2]}</p>`:`<span class="ic">${c[0]}</span><h3>${c[1]}</h3><p>${c[2]}</p>`;
- d.onclick=()=>{q.value=c[3];go('y')};d.onkeydown=e=>{if(e.key==='Enter')d.click()};$(box).appendChild(d);io.observe(d);tilt(d)})}
-mk('#newsg',[['','Eng yaxshi headshotlar','Bu hafta ko\'p qidirilgan headshot montajlar','free fire best headshots',"TAVSIYA"],['','1v4 clutch lahzalari','Yolg\'iz to\'rttaga qarshi jang','free fire 1v4 clutch',"CLUTCH"],['','AWM sniper zarbalari','Uzoq masofadan aniq otish','free fire awm sniper highlights',"SNIPER"]],true);
-mk('#cats',[['🎯','Headshot montaj','Eng chiroyli headshotlar to\'plami','free fire headshot montage'],['🔥','1v4 clutch','Yolg\'iz to\'rttaga qarshi','free fire 1v4 clutch'],['🔭','AWM sniper','Uzoq masofadan aniq otish','free fire awm sniper highlights'],['⚡','One tap','Bir o\'q, bir kill','free fire one tap headshot'],['😂','Kulgili lahzalar','Kulgili va kutilmagan','free fire funny moments'],['🏆','Pro o\'yinchilar','Kuchli o\'yinchilar highlight','free fire pro player highlights']]);
-const FX={h:['Headshot paytida 0.3s slow-mo (tezlik 30%)','Kill lahzasida zoom 110% → 100%','Beat drop ga flash va ekran titrashi','Kill sanog\'i (1, 2, 3) matn animatsiyasi','Kontrast +15, to\'yinganlik +10'],
- c:['Oxirgi kill da 0.5s freeze-frame','Har kill uchun kichik zoom-in','Bosim oshgan joyda vignette','Musiqa pasayib, kill da kuchli zarba','Salqin rang tusi (teal/orange)'],
- f:['Kulgili joyni 2 marta takrorlash','Kutilmagan lahzada tovush to\'xtashi','Matn stikerlari va emoji','Tezlashtirilgan (150%) o\'tish qismlari','Yorqin, iliq ranglar'],
- s:['Nishonga olish paytida sekinlashtirish','Zarba paytida zoom va shake','Kill-cam ni qisqartirish','Bass boost bilan zarba tovushi','Kino uslubidagi qora chiziqlar']};
-const CAP={h:['Bitta o\'q, bitta kill 🎯','Bu headshot qanday bo\'ldi? 🔥','Aim shunday bo\'ladi ⚡'],c:['1v4 va hammasi tugadi 😮','Bosim ostida sovuqqonlik 🧊','Clutch mana shunday 🏆'],f:['Oxirigacha kuting 😂','Bunday bo\'lishini kutmagandim 💀','O\'yindagi eng kulgili lahza'],s:['Uzoqdan, aniq, bir o\'q 🔭','AWM bilan tinch zarba','Sniper hayoti']};
-const NAME={h:'Headshot montaj',c:'Clutch',f:'Kulgili',s:'Sniper'};
-let plan='';
-$('#gen').onclick=()=>{
- const s=$('#st').value,p=$('#pl').value,d=Math.max(10,+$('#du').value||30),b=Math.max(60,+$('#bp').value||140),beat=60/b,bar=beat*4;
- const parts=[['HOOK',.1,'#ffb400','Eng kuchli headshot birinchi 2 soniyada'],['BUILD',.4,'#ff7a00','Kuchsizroq kadrlardan kuchliga qarab boring'],['DROP',.35,'#ff3d3d','Eng yaxshi kadrlar, har bitda kesish'],['OUTRO',.15,'#ffffff','Eng oxirgi kill va tez yakun']];
- let t=0,seg='',bar_='';
- parts.forEach(x=>{const len=d*x[1],a=t;t+=len;const f=v=>Math.floor(v)+'s';
-  seg+=`<div class="seg"><b>${f(a)}–${f(t)}</b><span><b style="color:#fff;min-width:0">${x[0]}.</b> ${x[3]}</span></div>`;
-  bar_+=`<i style="background:${x[2]}" data-w="${x[1]*100}%">${x[0]}</i>`});
- const cut=(beat*2).toFixed(2),ratio=/keng/.test(p)?'16:9 (gorizontal)':'9:16 (vertikal)';
- const cap=CAP[s][Math.floor(Math.random()*3)],tags='#freefire #freefirehighlights #headshot #ff #garena #shorts';
- plan=`${NAME[s]} · ${p} · ${d}s · ${b} BPM\nKesish: har ${cut}s (1 bar = ${bar.toFixed(2)}s)\nFormat: ${ratio}\n\nEffektlar:\n- ${FX[s].join('\n- ')}\n\nIzoh: ${cap}\n${tags}`;
- const o=$('#out');
- o.innerHTML=`<h3>${NAME[s]} rejasi</h3><div class="bar">${bar_}</div>${seg}
- <div class="seg"><b>Kesish</b><span>Har <b style="color:#fff;min-width:0">${cut}s</b> da kesing (${b} BPM). Format: ${ratio}</span></div>
- <h3 style="margin-top:16px">Effektlar</h3><ul class="fx">${FX[s].map(x=>`<li>${x}</li>`).join('')}</ul>
- <div class="cap">${cap}<br><span style="color:var(--am)">${tags}</span></div><button class="btn" id="cp">Nusxalash</button>`;
- o.classList.add('on');
- requestAnimationFrame(()=>requestAnimationFrame(()=>$$('.bar i').forEach(i=>i.style.width=i.dataset.w)));
- $('#cp').onclick=()=>{(navigator.clipboard?navigator.clipboard.writeText(plan):Promise.reject()).then(()=>toast('Reja nusxalandi')).catch(()=>toast('Nusxalash ishlamadi'))};
- o.scrollIntoView({behavior:'smooth',block:'nearest'});
-};
+let platform='youtube',timer;
+const input=$('#query'),toast=$('#toast');
+const get=k=>{try{return JSON.parse(localStorage.getItem('hl_'+k)||'[]')}catch{return []}};
+const put=(k,v)=>localStorage.setItem('hl_'+k,JSON.stringify(v));
+function msg(t){toast.textContent=t;toast.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>toast.classList.remove('show'),1900)}
+function render(key,id,empty){const el=$(id),items=get(key);el.innerHTML='';if(!items.length){el.innerHTML='<span class="empty">'+empty+'</span>';return}items.forEach(v=>{let b=document.createElement('button');b.className='history-item';b.textContent=v;b.title=v;b.onclick=()=>{input.value=v;runSearch()};el.appendChild(b)})}
+function runSearch(){let q=input.value.trim();if(!q){msg('Search query kiriting');input.focus();return}let base=platform==='youtube'?'https://www.youtube.com/results?search_query=':'https://www.tiktok.com/search?q=';window.open(base+encodeURIComponent(q),'_blank','noopener');let h=[q,...get('history').filter(x=>x.toLowerCase()!==q.toLowerCase())].slice(0,10);put('history',h);render('history','#history','Search history will appear here.');msg('Search opened')}
+$('#searchBtn').onclick=runSearch;input.addEventListener('keydown',e=>{if(e.key==='Enter')runSearch()});
+$$('[data-platform]').forEach(b=>b.onclick=()=>{platform=b.dataset.platform;$$('[data-platform]').forEach(x=>x.classList.toggle('active',x===b))});
+$$('[data-q]').forEach(b=>b.onclick=()=>{input.value=b.dataset.q;input.focus()});
+$$('[data-filter]').forEach(b=>b.onclick=()=>{let f=b.dataset.filter;$$('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));if(f==='popular')input.value='free fire most viewed highlights';else if(f==='recent')input.value='free fire latest highlights 2026';else input.value='free fire headshot montage'});
+$('#clearHistory').onclick=()=>{put('history',[]);render('history','#history','Search history will appear here.');msg('History cleared')};
+$('#saveSearch').onclick=()=>{let q=input.value.trim();if(!q){msg('Avval qidiruv yozing');return}let a=[q,...get('favorites').filter(x=>x!==q)].slice(0,10);put('favorites',a);render('favorites','#favorites','Save a search to keep it here.');msg('Search saved')};
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();input.focus()}});
+addEventListener('scroll',()=>$('#header').classList.toggle('scrolled',scrollY>25),{passive:true});
+$('#year').textContent=new Date().getFullYear();render('history','#history','Search history will appear here.');render('favorites','#favorites','Save a search to keep it here.');
+// Gold particle field, inspired by the reference video's cinematic atmosphere.
+const canvas=$('#dust'),ctx=canvas.getContext('2d');let w,h,pts=[];
+function resize(){w=canvas.width=innerWidth*devicePixelRatio;h=canvas.height=innerHeight*devicePixelRatio;canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';pts=Array.from({length:Math.min(190,Math.floor(innerWidth/7))},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.3+.25,v:Math.random()*.22+.04,a:Math.random()*.55+.12,p:Math.random()*6.28}))}
+function draw(){ctx.clearRect(0,0,w,h);for(const p of pts){p.y-=p.v*devicePixelRatio;p.x+=Math.sin(p.p+=.006)*.12*devicePixelRatio;if(p.y<0){p.y=h;p.x=Math.random()*w}ctx.beginPath();ctx.arc(p.x,p.y,p.r*devicePixelRatio,0,Math.PI*2);ctx.fillStyle=`rgba(220,195,139,${p.a})`;ctx.shadowBlur=8*devicePixelRatio;ctx.shadowColor='#d9c18a';ctx.fill()}requestAnimationFrame(draw)}
+resize();draw();addEventListener('resize',resize);
+})();
 </script>
-</body>
-</html>
+</body></html>'''
+out=Path('/mnt/data/HeadshotLab_Cinematic_Sponsors.html')
+out.write_text(html,encoding='utf-8')
+print(out, out.stat().st_size)
